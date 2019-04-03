@@ -1,17 +1,30 @@
 {
-  "name": "ngx-material-keyboard-src",
-  "version": "0.1.2-SNAPSHOT",
-  "description": "Onscreen virtual keyboard for Angular ≥ 5 (https://angular.io/) using Material 2 (https://material.angular.io/).",
+  "name": "mat-keyboard",
+  "version": "0.1.1",
+  "description": "Onscreen virtual keyboard for Angular based on material components.",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ngx-material-keyboard/core.git"
+    "url": "git+https://github.com/ngx-extensions/mat-keyboard.git"
   },
   "author": "David Enke <post@davidenke.de>",
   "license": "MIT",
+  "contributors": [
+    {
+      "name": "José Toledo Navarro",
+      "email": "jotatoledon@gmail.com",
+      "url": "https://github.com/jotatoledo"
+    }
+  ],
+  "keywords": [
+    "angular",
+    "material",
+    "keyboard",
+    "virtual"
+  ],
   "bugs": {
-    "url": "https://github.com/ngx-material-keyboard/core/issues"
+    "url": "https://github.com/ngx-extensions/mat-keyboard/issues"
   },
-  "homepage": "https://github.com/ngx-material-keyboard/core",
+  "homepage": "https://github.com/ngx-extensions/mat-keyboard",
   "scripts": {
     "ng": "ng",
     "start": "npm run start:demo",
@@ -23,43 +36,44 @@
     "test": "ng test",
     "lint": "npm run lint:ts && npm run lint:sass",
     "lint:ts": "ng lint --type-check=true",
-    "lint:sass": "sass-lint --verbose --no-exit --config ./.sass-lint.yml",
-    "postinstall": "npm rebuild node-sass"
+    "lint:sass": "sass-lint --verbose --no-exit --config ./.sass-lint.yml"
   },
   "dependencies": {
-    "@angular/animations": "5.2.5",
-    "@angular/cdk": "5.2.2",
-    "@angular/common": "5.2.5",
-    "@angular/compiler": "5.2.5",
-    "@angular/core": "5.2.5",
-    "@angular/forms": "5.2.5",
-    "@angular/http": "5.2.5",
-    "@angular/material": "5.2.2",
-    "@angular/platform-browser": "5.2.5",
-    "@angular/platform-browser-dynamic": "5.2.5",
-    "@angular/router": "5.2.5",
+    "@angular/animations": "^7.2.11",
+    "@angular/cdk": "^7.3.6",
+    "@angular/common": "^7.2.11",
+    "@angular/compiler": "^7.2.11",
+    "@angular/core": "^7.2.11",
+    "@angular/forms": "^7.2.11",
+    "@angular/material": "^7.3.6",
+    "@angular/platform-browser": "^7.2.11",
+    "@angular/platform-browser-dynamic": "^7.2.11",
+    "@angular/router": "^7.2.11",
     "classlist.js": "1.1.20150312",
-    "core-js": "2.5.3",
+    "core-js": "^2.5.3",
     "hammerjs": "2.0.8",
     "reset-css": "2.2.1",
-    "rxjs": "5.5.6",
-    "web-animations-js": "2.3.1",
-    "zone.js": "0.8.20"
+    "rxjs": "^6.4.0",
+    "web-animations-js": "^2.3.1",
+    "zone.js": "~0.8.26"
   },
   "devDependencies": {
-    "@angular/cli": "1.7.0",
-    "@angular/compiler-cli": "5.2.5",
-    "@angular/language-service": "5.2.5",
+    "@angular-devkit/build-angular": "~0.13.0",
+    "@angular-devkit/build-ng-packagr": "~0.13.0",
+    "@angular/cli": "^7.3.7",
+    "@angular/compiler-cli": "^7.2.11",
+    "@angular/language-service": "^7.2.11",
     "@compodoc/compodoc": "1.1.5",
     "@types/jasmine": "2.8.6",
     "@types/node": "9.4.6",
-    "codelyzer": "4.1.0",
+    "codelyzer": "^5.0.0",
     "cpx": "1.5.0",
-    "ng-packagr": "2.1.0",
-    "rxjs-tslint-rules": "3.14.0",
+    "ng-packagr": "^4.0.0",
     "sass-lint": "1.12.1",
     "ts-node": "5.0.0",
-    "tslint": "5.9.1",
-    "typescript": "2.6.2"
+    "tsickle": "~0.29.0",
+    "tslib": "^1.9.0",
+    "tslint": "^5.15.0",
+    "typescript": "~3.2.4"
   }
 }
