@@ -1,8 +1,18 @@
-import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, HostBinding, HostListener, Inject, LOCALE_ID, OnInit, QueryList, ViewChildren } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  EventEmitter,
+  HostBinding,
+  HostListener,
+  Inject,
+  LOCALE_ID,
+  OnInit,
+  QueryList,
+  ViewChildren
+} from '@angular/core';
 import { AbstractControl } from '@angular/forms';
-
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Observable } from 'rxjs/Observable';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 import { MatKeyboardRef } from '../../classes/keyboard-ref.class';
 import { KeyboardClassKey } from '../../enums/keyboard-class-key.enum';
@@ -23,7 +33,6 @@ import { MatKeyboardKeyComponent } from '../keyboard-key/keyboard-key.component'
   preserveWhitespaces: false
 })
 export class MatKeyboardComponent implements OnInit {
-
   private _darkTheme: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
   private _isDebug: BehaviorSubject<boolean> = new BehaviorSubject(false);
@@ -84,8 +93,7 @@ export class MatKeyboardComponent implements OnInit {
   }
 
   // inject dependencies
-  constructor(@Inject(LOCALE_ID) private _locale: string,
-              private _keyboardService: MatKeyboardService) {}
+  constructor(@Inject(LOCALE_ID) private _locale: string, private _keyboardService: MatKeyboardService) {}
 
   setInputInstance(inputInstance: ElementRef) {
     this._inputInstance$.next(inputInstance);
@@ -151,10 +159,18 @@ export class MatKeyboardComponent implements OnInit {
     if (event.key === KeyboardClassKey.Caps) {
       this.onCapsClick(event.getModifierState(KeyboardClassKey.Caps));
     }
-    if (event.key === KeyboardClassKey.Alt && this._modifier !== KeyboardModifier.Alt && this._modifier !== KeyboardModifier.ShiftAlt) {
+    if (
+      event.key === KeyboardClassKey.Alt &&
+      this._modifier !== KeyboardModifier.Alt &&
+      this._modifier !== KeyboardModifier.ShiftAlt
+    ) {
       this.onAltClick();
     }
-    if (event.key === KeyboardClassKey.Shift && this._modifier !== KeyboardModifier.Shift && this._modifier !== KeyboardModifier.ShiftAlt) {
+    if (
+      event.key === KeyboardClassKey.Shift &&
+      this._modifier !== KeyboardModifier.Shift &&
+      this._modifier !== KeyboardModifier.ShiftAlt
+    ) {
       this.onShiftClick();
     }
   }
@@ -173,10 +189,16 @@ export class MatKeyboardComponent implements OnInit {
       });
 
     // simulate modifier release
-    if (event.key === KeyboardClassKey.Alt && (this._modifier === KeyboardModifier.Alt || this._modifier === KeyboardModifier.ShiftAlt)) {
+    if (
+      event.key === KeyboardClassKey.Alt &&
+      (this._modifier === KeyboardModifier.Alt || this._modifier === KeyboardModifier.ShiftAlt)
+    ) {
       this.onAltClick();
     }
-    if (event.key === KeyboardClassKey.Shift && (this._modifier === KeyboardModifier.Shift || this._modifier === KeyboardModifier.ShiftAlt)) {
+    if (
+      event.key === KeyboardClassKey.Shift &&
+      (this._modifier === KeyboardModifier.Shift || this._modifier === KeyboardModifier.ShiftAlt)
+    ) {
       this.onShiftClick();
     }
   }
@@ -254,5 +276,4 @@ export class MatKeyboardComponent implements OnInit {
         return KeyboardModifier.None;
     }
   }
-
 }

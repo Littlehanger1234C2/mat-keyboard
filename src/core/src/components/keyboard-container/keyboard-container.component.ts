@@ -1,11 +1,19 @@
 import { animate, AnimationEvent, state, style, transition, trigger } from '@angular/animations';
 import { BasePortalOutlet, CdkPortalOutlet, ComponentPortal } from '@angular/cdk/portal';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ComponentRef, EmbeddedViewRef, HostBinding, HostListener, NgZone, OnDestroy, ViewChild } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  ComponentRef,
+  EmbeddedViewRef,
+  HostBinding,
+  HostListener,
+  NgZone,
+  OnDestroy,
+  ViewChild
+} from '@angular/core';
 import { AnimationCurves, AnimationDurations } from '@angular/material/core';
-
-import { Observable } from 'rxjs/Observable';
-import { Subject } from 'rxjs/Subject';
-import 'rxjs/add/operator/first';
+import { Observable, Subject } from 'rxjs';
 
 import { MatKeyboardConfig } from '../../configs/keyboard.config';
 import { KeyboardAnimationState } from '../../enums/keyboard-animation-state.enum';
@@ -42,7 +50,6 @@ export const HIDE_ANIMATION = `${AnimationDurations.EXITING} ${AnimationCurves.A
   ]
 })
 export class MatKeyboardContainerComponent extends BasePortalOutlet implements OnDestroy {
-
   /** Whether the component has been destroyed. */
   private _destroyed = false;
 
@@ -66,8 +73,7 @@ export class MatKeyboardContainerComponent extends BasePortalOutlet implements O
   // the keyboard configuration
   keyboardConfig: MatKeyboardConfig;
 
-  constructor(private _ngZone: NgZone,
-              private _changeDetectorRef: ChangeDetectorRef) {
+  constructor(private _ngZone: NgZone, private _changeDetectorRef: ChangeDetectorRef) {
     super();
   }
 
@@ -95,7 +101,10 @@ export class MatKeyboardContainerComponent extends BasePortalOutlet implements O
   onAnimationEnd(event: AnimationEvent) {
     const { fromState, toState } = event;
 
-    if ((toState === KeyboardAnimationState.Void && fromState !== KeyboardAnimationState.Void) || toState.startsWith('hidden')) {
+    if (
+      (toState === KeyboardAnimationState.Void && fromState !== KeyboardAnimationState.Void) ||
+      toState.startsWith('hidden')
+    ) {
       this._completeExit();
     }
 

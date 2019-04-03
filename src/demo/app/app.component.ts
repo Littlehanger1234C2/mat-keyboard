@@ -1,12 +1,14 @@
 import { Component, ElementRef, Inject, LOCALE_ID, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormControl, NgControl, NgForm, NgModel } from '@angular/forms';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
-
-import { IKeyboardLayout, MAT_KEYBOARD_LAYOUTS, MatKeyboardComponent, MatKeyboardRef, MatKeyboardService } from '@ngx-material-keyboard/core';
-
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Observable } from 'rxjs/Observable';
-import { Subscription } from 'rxjs/Subscription';
+import {
+  IKeyboardLayout,
+  MAT_KEYBOARD_LAYOUTS,
+  MatKeyboardComponent,
+  MatKeyboardRef,
+  MatKeyboardService
+} from '@ngx-material-keyboard/core';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { MatInput } from '@angular/material';
 
 @Component({
@@ -15,12 +17,11 @@ import { MatInput } from '@angular/material';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit, OnDestroy {
-
   private _enterSubscription: Subscription;
 
   private _keyboardRef: MatKeyboardRef<MatKeyboardComponent>;
 
-  private _submittedForms = new BehaviorSubject<{ control: string, value: string }[][]>([]);
+  private _submittedForms = new BehaviorSubject<{ control: string; value: string }[][]>([]);
 
   @ViewChild('attachTo', { read: ElementRef })
   private _attachToElement: ElementRef;
@@ -28,7 +29,7 @@ export class AppComponent implements OnInit, OnDestroy {
   @ViewChild('attachTo', { read: NgModel })
   private _attachToControl: NgControl;
 
-  get submittedForms(): Observable<{ control: string, value: string }[][]> {
+  get submittedForms(): Observable<{ control: string; value: string }[][]> {
     return this._submittedForms.asObservable();
   }
 
@@ -57,14 +58,15 @@ export class AppComponent implements OnInit, OnDestroy {
     return this._keyboardService.isOpened;
   }
 
-  constructor(private _keyboardService: MatKeyboardService,
-              @Inject(LOCALE_ID) public locale,
-              @Inject(MAT_KEYBOARD_LAYOUTS) private _layouts) {}
+  constructor(
+    private _keyboardService: MatKeyboardService,
+    @Inject(LOCALE_ID) public locale,
+    @Inject(MAT_KEYBOARD_LAYOUTS) private _layouts
+  ) {}
 
   ngOnInit() {
     this.defaultLocale = ` ${this.locale}`.slice(1);
-    this.layouts = Object
-      .keys(this._layouts)
+    this.layouts = Object.keys(this._layouts)
       .map((name: string) => ({
         name,
         layout: this._layouts[name]
@@ -78,12 +80,10 @@ export class AppComponent implements OnInit, OnDestroy {
 
   submitForm(form?: NgForm) {
     const submittedForms = this._submittedForms.getValue();
-    const submittedForm = Object
-      .keys(form.controls)
-      .map((control: string) => ({
-        control,
-        value: form.controls[control].value
-      }));
+    const submittedForm = Object.keys(form.controls).map((control: string) => ({
+      control,
+      value: form.controls[control].value
+    }));
     submittedForms.push(submittedForm);
     this._submittedForms.next(submittedForms);
   }
@@ -132,5 +132,4 @@ export class AppComponent implements OnInit, OnDestroy {
     this.darkTheme = toggle.checked;
     this._keyboardRef.instance.darkTheme = this.darkTheme;
   }
-
 }

@@ -1,7 +1,16 @@
-import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Inject, Input, OnInit, Output } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  EventEmitter,
+  Inject,
+  Input,
+  OnInit,
+  Output
+} from '@angular/core';
 import { FormControl } from '@angular/forms';
 
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { BehaviorSubject } from 'rxjs';
 
 import { MAT_KEYBOARD_DEADKEYS } from '../../configs/keyboard-deadkey.config';
 import { MAT_KEYBOARD_ICONS } from '../../configs/keyboard-icons.config';
@@ -21,7 +30,6 @@ export const VALUE_TAB = '\t';
   preserveWhitespaces: false
 })
 export class MatKeyboardKeyComponent implements OnInit {
-
   private _deadkeyKeys: string[] = [];
 
   private _iconKeys: string[] = [];
@@ -142,8 +150,10 @@ export class MatKeyboardKeyComponent implements OnInit {
   }
 
   // Inject dependencies
-  constructor(@Inject(MAT_KEYBOARD_DEADKEYS) private _deadkeys: IKeyboardDeadkeys,
-              @Inject(MAT_KEYBOARD_ICONS) private _icons: IKeyboardIcons) {}
+  constructor(
+    @Inject(MAT_KEYBOARD_DEADKEYS) private _deadkeys: IKeyboardDeadkeys,
+    @Inject(MAT_KEYBOARD_ICONS) private _icons: IKeyboardIcons
+  ) {}
 
   ngOnInit() {
     // read the deadkeys
@@ -347,5 +357,4 @@ export class MatKeyboardKeyComponent implements OnInit {
   private _isTextarea(): boolean {
     return this.input && this.input.nativeElement && this.input.nativeElement.tagName === 'TEXTAREA';
   }
-
 }
