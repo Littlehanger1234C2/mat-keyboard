@@ -2,6 +2,11 @@
   "ignore": ["CHANGELOG.md"],
   "linters": {
     "*.json": ["prettier --write", "git add"],
-    "*.ts": ["prettier --write", "tslint --fix", "git add"]
+    "./src/**/*.ts": ["prettier --write", "tslint -c ./src/tslint.json --fix", "git add"],
+    "./projects/mat-keyboard/**/*.ts": [
+      "prettier --write",
+      "tslint -c ./projects/mat-keyboard/tslint.json --fix",
+      "git add"
+    ]
   }
 }

@@ -17,6 +17,8 @@
         "order": ["static-field", "instance-field", "static-method", "instance-method"]
       }
     ],
+    "typedef": [true, "call-signature", "parameter", "property-declaration"],
+    "no-duplicate-imports": true,
     "no-arg": true,
     "no-bitwise": true,
     "no-console": [true, "debug", "info", "time", "timeEnd", "trace"],
