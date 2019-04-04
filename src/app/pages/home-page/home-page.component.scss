@@ -18,9 +18,13 @@
 .col {
   position: relative;
 
-  > .mat-input-container {
+  > .mat-form-field {
     display: block;
   }
+}
+
+.push-right {
+  margin-right: 8px;
 }
 
 .mat-raised-button {
@@ -36,10 +40,8 @@
 }
 
 pre {
-  background-color: #e0e0e0;
   border-radius: 3px;
   display: block;
-  font: 11px/1.5 Monospaced, monospace;
   margin: 8px 0;
   min-height: 16px;
   padding: 4px 8px;

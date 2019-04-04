@@ -1,0 +1,28 @@
+@import '~@angular/material/theming';
+@import './app-theme';
+
+[flex] {
+  flex: 1;
+  box-sizing: border-box;
+}
+
+body {
+  height: 100%;
+}
+
+.mat-toolbar {
+  transition: background 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.app-background {
+  transition: background 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@include mat-core();
+
+$primary: mat-palette($mat-indigo);
+$accent: mat-palette($mat-pink, A200, A100, A400);
+
+$theme: mat-light-theme($primary, $accent);
+
+@include app-theme($theme);

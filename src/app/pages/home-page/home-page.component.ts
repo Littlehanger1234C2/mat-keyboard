@@ -1,25 +1,30 @@
-import { Component, ElementRef, Inject, LOCALE_ID, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { FormControl, NgControl, NgForm, NgModel } from '@angular/forms';
-import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import {
-  IKeyboardLayout,
-  MAT_KEYBOARD_LAYOUTS,
-  MatKeyboardComponent,
-  MatKeyboardRef,
-  MatKeyboardService
-} from '@ngx-material-keyboard/core';
-import { BehaviorSubject, Observable, Subscription } from 'rxjs';
-import { MatInput } from '@angular/material';
+  Component,
+  OnInit,
+  ChangeDetectionStrategy,
+  OnDestroy,
+  ViewChild,
+  ElementRef,
+  Inject,
+  LOCALE_ID,
+  ViewEncapsulation
+} from '@angular/core';
+import { Subscription, BehaviorSubject, Observable } from 'rxjs';
+import { MatKeyboardRef, IKeyboardLayout, MatKeyboard, MAT_KEYBOARD_LAYOUTS } from '@ngx-extensions/mat-keyboard';
+import { NgModel, NgControl, FormControl, NgForm } from '@angular/forms';
+import { MatSlideToggleChange } from '@angular/material';
 
 @Component({
-  selector: 'mat-keyboard-demo-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  selector: 'demo-home-page',
+  templateUrl: './home-page.component.html',
+  styleUrls: ['./home-page.component.scss'],
+  encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AppComponent implements OnInit, OnDestroy {
-  private _enterSubscription: Subscription;
+export class HomePageComponent implements OnInit, OnDestroy {
+  private _enterSubscription = Subscription.EMPTY;
 
-  private _keyboardRef: MatKeyboardRef<MatKeyboardComponent>;
+  private _keyboardRef: MatKeyboardRef;
 
   private _submittedForms = new BehaviorSubject<{ control: string; value: string }[][]>([]);
 
@@ -32,8 +37,6 @@ export class AppComponent implements OnInit, OnDestroy {
   get submittedForms(): Observable<{ control: string; value: string }[][]> {
     return this._submittedForms.asObservable();
   }
-
-  darkTheme: boolean;
 
   duration: number;
 
@@ -59,7 +62,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   constructor(
-    private _keyboardService: MatKeyboardService,
+    private _keyboardService: MatKeyboard,
     @Inject(LOCALE_ID) public locale,
     @Inject(MAT_KEYBOARD_LAYOUTS) private _layouts
   ) {}
@@ -90,10 +93,12 @@ export class AppComponent implements OnInit, OnDestroy {
 
   openKeyboard(locale = this.defaultLocale) {
     this._keyboardRef = this._keyboardService.open(locale, {
-      darkTheme: this.darkTheme,
       duration: this.duration,
       isDebug: this.isDebug
     });
+    if (this._enterSubscription) {
+      this._enterSubscription.unsubscribe();
+    }
     this._enterSubscription = this._keyboardRef.instance.enterClick.subscribe(() => {
       this.submitForm();
     });
@@ -111,7 +116,6 @@ export class AppComponent implements OnInit, OnDestroy {
 
   openAttachedKeyboard(locale = this.defaultLocale) {
     this._keyboardRef = this._keyboardService.open(locale, {
-      darkTheme: this.darkTheme,
       duration: this.duration,
       isDebug: this.isDebug
     });
@@ -126,10 +130,5 @@ export class AppComponent implements OnInit, OnDestroy {
   toggleDebug(toggle: MatSlideToggleChange) {
     this.isDebug = toggle.checked;
     this._keyboardRef.instance.isDebug = this.isDebug;
-  }
-
-  toggleDarkTheme(toggle: MatSlideToggleChange) {
-    this.darkTheme = toggle.checked;
-    this._keyboardRef.instance.darkTheme = this.darkTheme;
   }
 }

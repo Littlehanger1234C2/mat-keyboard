@@ -1,0 +1,15 @@
+@import '~@angular/material/theming';
+@import '../projects/mat-keyboard/src/lib/keyboard-theme';
+
+@mixin app-theme($theme) {
+  $background: map-get($theme, background);
+  $foreground: map-get($theme, foreground);
+
+  .app-background {
+    background-color: mat-color($background, background);
+    color: mat-color($foreground, text);
+  }
+
+  @include angular-material-theme($theme);
+  @include mat-keyboard-theme($theme);
+}

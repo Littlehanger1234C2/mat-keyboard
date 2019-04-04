@@ -29,7 +29,7 @@
     "start": "ng serve",
     "build": "npm run build:lib && npm run build:demo && npm run build:docs",
     "build:lib": "rm -rf ./dist/mat-keyboard && ng build mat-keyboard",
-    "build:demo": "ng build --prod --locale=de --progress=false --base-href=/demo/",
+    "build:demo": "ng build --prod --base-href=/demo/",
     "build:docs": "compodoc ./src/core -p ./tsconfig.json --silent --disableCoverage --disablePrivateOrInternalSupport --theme readthedocs --output ./dist/docs",
     "test": "ng test",
     "lint:check": "npm run lint:ts",

@@ -11,9 +11,17 @@
     "experimentalDecorators": true,
     "noUnusedParameters": false,
     "target": "es5",
+    "paths": {
+      "@ngx-extensions/mat-keyboard": ["projects/mat-keyboard/src/public-api.ts"]
+    },
     "typeRoots": ["node_modules/@types"],
     "lib": ["es2017", "dom"],
     "module": "es2015"
+  },
+  "angularCompilerOptions": {
+    "paths": {
+      "@ngx-extensions/mat-keyboard": ["projects/mat-keyboard/src/public-api.ts"]
+    }
   },
   "exclude": [".ng_build"]
 }
