@@ -58,8 +58,6 @@ export class MatKeyboard {
     const _config = _applyConfigDefaults(config);
     const keyboardRef = this._attachKeyboardContent(_config);
 
-    keyboardRef.instance.isDebug = _config.isDebug;
-
     // a locale is provided
     if (this._keyboardLayout.isLocaleAvailable(layoutOrLocale)) {
       keyboardRef.instance.locale = layoutOrLocale;

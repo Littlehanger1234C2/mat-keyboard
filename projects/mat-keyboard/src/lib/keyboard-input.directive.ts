@@ -24,8 +24,6 @@ export class MatKeyboardInput implements OnDestroy {
 
   @Input() duration: number;
 
-  @Input() isDebug: boolean;
-
   @Output() enterClick: EventEmitter<void> = new EventEmitter<void>();
 
   @Output() capsClick: EventEmitter<void> = new EventEmitter<void>();
@@ -47,8 +45,7 @@ export class MatKeyboardInput implements OnDestroy {
   @HostListener('focus')
   showKeyboard() {
     this._keyboardRef = this._keyboardService.open(this.matKeyboard, {
-      duration: this.duration,
-      isDebug: this.isDebug
+      duration: this.duration
     });
 
     // reference the input element

@@ -5,8 +5,7 @@ import { AriaLivePoliteness } from '@angular/cdk/a11y';
 const configDefaults: MatKeyboardConfig = {
   politeness: 'assertive',
   announcementMessage: '',
-  duration: 0,
-  isDebug: false
+  duration: 0
 };
 
 export interface MatKeyboardConfig {
@@ -19,10 +18,8 @@ export interface MatKeyboardConfig {
   /** The view container to place the overlay for the keyboard into. */
   viewContainerRef?: ViewContainerRef;
 
+  /** The length of time in milliseconds to wait before automatically dismissing the keyboard after blur. */
   duration: number;
-
-  /** Enable the debug view **/
-  isDebug: boolean;
 
   /** Enable the debug view **/
   ngControl?: NgControl;

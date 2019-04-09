@@ -1,4 +1,4 @@
-<div class="mat-keyboard-wrapper" [class.debug]="isDebug$ | async">
+<div class="mat-keyboard-wrapper">
   <nav class="mat-keyboard-layout">
     <div class="mat-keyboard-row" *ngFor="let row of layout.keys">
       <ng-container *ngFor="let key of row; trackBy: trackKey">

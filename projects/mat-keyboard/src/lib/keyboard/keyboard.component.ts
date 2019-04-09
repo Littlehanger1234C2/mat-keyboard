@@ -37,8 +37,6 @@ import { MatKeyboardLayout } from '../keyboard-layout.service';
   }
 })
 export class MatKeyboardComponent implements OnInit {
-  private _isDebug: BehaviorSubject<boolean> = new BehaviorSubject(false);
-
   private _inputInstance$: BehaviorSubject<ElementRef | null> = new BehaviorSubject(null);
 
   private _modifier: KeyboardModifier = KeyboardModifier.None;
@@ -46,7 +44,7 @@ export class MatKeyboardComponent implements OnInit {
   private _capsLocked = false;
 
   @ViewChildren(MatKeyboardKeyComponent)
-  _keys: QueryList<MatKeyboardKeyComponent>;
+  keys: QueryList<MatKeyboardKeyComponent>;
 
   // the service provides a locale or layout optionally
   locale?: string;
@@ -71,16 +69,6 @@ export class MatKeyboardComponent implements OnInit {
     return this._inputInstance$.asObservable();
   }
 
-  set isDebug(isDebug: boolean) {
-    if (this._isDebug.getValue() !== isDebug) {
-      this._isDebug.next(isDebug);
-    }
-  }
-
-  get isDebug$(): Observable<boolean> {
-    return this._isDebug.asObservable();
-  }
-
   // inject dependencies
   constructor(@Inject(LOCALE_ID) private _locale: string, private _keyboardLayout: MatKeyboardLayout) {}
 
@@ -99,7 +87,7 @@ export class MatKeyboardComponent implements OnInit {
   @HostListener('document:keydown', ['$event'])
   onKeyDown(event: KeyboardEvent) {
     // 'activate' corresponding key
-    this._keys
+    this.keys
       .filter((key: MatKeyboardKeyComponent) => key.key === event.key)
       .forEach((key: MatKeyboardKeyComponent) => {
         key.pressed = true;
@@ -132,7 +120,7 @@ export class MatKeyboardComponent implements OnInit {
   @HostListener('document:keyup', ['$event'])
   onKeyUp(event: KeyboardEvent) {
     // 'deactivate' corresponding key
-    this._keys
+    this.keys
       .filter((key: MatKeyboardKeyComponent) => key.key === event.key)
       .forEach((key: MatKeyboardKeyComponent) => {
         key.pressed = false;
