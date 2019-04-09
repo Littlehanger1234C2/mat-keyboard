@@ -8,7 +8,9 @@ import {
   LOCALE_ID,
   OnInit,
   QueryList,
-  ViewChildren
+  ViewChildren,
+  ViewEncapsulation,
+  TrackByFunction
 } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -29,13 +31,12 @@ import { MatKeyboardLayout } from '../keyboard-layout.service';
   templateUrl: './keyboard.component.html',
   styleUrls: ['./keyboard.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
   host: {
     class: 'mat-keyboard'
   }
 })
 export class MatKeyboardComponent implements OnInit {
-  private _darkTheme: BehaviorSubject<boolean> = new BehaviorSubject(false);
-
   private _isDebug: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
   private _inputInstance$: BehaviorSubject<ElementRef | null> = new BehaviorSubject(null);
@@ -70,20 +71,10 @@ export class MatKeyboardComponent implements OnInit {
     return this._inputInstance$.asObservable();
   }
 
-  set darkTheme(darkTheme: boolean) {
-    if (this._darkTheme.getValue() !== darkTheme) {
-      this._darkTheme.next(darkTheme);
-    }
-  }
-
   set isDebug(isDebug: boolean) {
     if (this._isDebug.getValue() !== isDebug) {
       this._isDebug.next(isDebug);
     }
-  }
-
-  get darkTheme$(): Observable<boolean> {
-    return this._darkTheme.asObservable();
   }
 
   get isDebug$(): Observable<boolean> {
@@ -93,51 +84,12 @@ export class MatKeyboardComponent implements OnInit {
   // inject dependencies
   constructor(@Inject(LOCALE_ID) private _locale: string, private _keyboardLayout: MatKeyboardLayout) {}
 
-  setInputInstance(inputInstance: ElementRef) {
-    this._inputInstance$.next(inputInstance);
-  }
-
-  attachControl(control: AbstractControl) {
-    this.control = control;
-  }
-
   ngOnInit() {
     // set a fallback using the locale
     if (!this.layout) {
       this.locale = this._keyboardLayout.mapLocale(this._locale) ? this._locale : 'en-US';
       this.layout = this._keyboardLayout.getLocaleLayout(this.locale);
     }
-  }
-
-  /**
-   * dismisses the keyboard
-   */
-  dismiss() {
-    this.keyboardRef.dismiss();
-  }
-
-  /**
-   * checks if a given key is currently pressed
-   * @param key
-   * @param
-   */
-  isActive(key: (string | SpecialKey)[]): boolean {
-    const modifiedKey: string = this.getModifiedKey(key);
-    const isActiveCapsLock: boolean = modifiedKey === SpecialKey.Caps && this._capsLocked;
-    const isActiveModifier: boolean = modifiedKey === KeyboardModifier[this._modifier];
-    return isActiveCapsLock || isActiveModifier;
-  }
-
-  // retrieves modified key
-  getModifiedKey(key: (string | SpecialKey)[]): string {
-    let modifier: KeyboardModifier = this._modifier;
-
-    // `CapsLock` inverts the meaning of `Shift`
-    if (this._capsLocked) {
-      modifier = this._invertShiftModifier(this._modifier);
-    }
-
-    return key[modifier];
   }
 
   /**
@@ -199,6 +151,47 @@ export class MatKeyboardComponent implements OnInit {
     ) {
       this.onShiftClick();
     }
+  }
+
+  trackKey: TrackByFunction<string | SpecialKey> = (_index, item) => item;
+
+  setInputInstance(inputInstance: ElementRef) {
+    this._inputInstance$.next(inputInstance);
+  }
+
+  attachControl(control: AbstractControl) {
+    this.control = control;
+  }
+
+  /**
+   * dismisses the keyboard
+   */
+  dismiss() {
+    this.keyboardRef.dismiss();
+  }
+
+  /**
+   * checks if a given key is currently pressed
+   * @param key
+   * @param
+   */
+  isActive(key: (string | SpecialKey)[]): boolean {
+    const modifiedKey: string = this.getModifiedKey(key);
+    const isActiveCapsLock: boolean = modifiedKey === SpecialKey.Caps && this._capsLocked;
+    const isActiveModifier: boolean = modifiedKey === KeyboardModifier[this._modifier];
+    return isActiveCapsLock || isActiveModifier;
+  }
+
+  // retrieves modified key
+  getModifiedKey(key: (string | SpecialKey)[]): string {
+    let modifier: KeyboardModifier = this._modifier;
+
+    // `CapsLock` inverts the meaning of `Shift`
+    if (this._capsLocked) {
+      modifier = this._invertShiftModifier(this._modifier);
+    }
+
+    return key[modifier];
   }
 
   /**

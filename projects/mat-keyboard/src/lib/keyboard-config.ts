@@ -21,9 +21,6 @@ export interface MatKeyboardConfig {
 
   duration: number;
 
-  /** Enable a dark keyboard **/
-  darkTheme?: boolean;
-
   /** Enable the debug view **/
   isDebug: boolean;
 

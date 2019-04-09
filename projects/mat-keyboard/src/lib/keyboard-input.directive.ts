@@ -22,8 +22,6 @@ export class MatKeyboardInput implements OnDestroy {
 
   @Input() matKeyboard: string;
 
-  @Input() darkTheme: boolean;
-
   @Input() duration: number;
 
   @Input() isDebug: boolean;
@@ -43,13 +41,12 @@ export class MatKeyboardInput implements OnDestroy {
   ) {}
 
   ngOnDestroy() {
-    this._hideKeyboard();
+    this.hideKeyboard();
   }
 
   @HostListener('focus')
-  _showKeyboard() {
+  showKeyboard() {
     this._keyboardRef = this._keyboardService.open(this.matKeyboard, {
-      darkTheme: this.darkTheme,
       duration: this.duration,
       isDebug: this.isDebug
     });
@@ -63,14 +60,14 @@ export class MatKeyboardInput implements OnDestroy {
     }
 
     // connect outputs
-    this._keyboardRef.instance.enterClick.subscribe(() => this.enterClick.next());
-    this._keyboardRef.instance.capsClick.subscribe(() => this.capsClick.next());
-    this._keyboardRef.instance.altClick.subscribe(() => this.altClick.next());
-    this._keyboardRef.instance.shiftClick.subscribe(() => this.shiftClick.next());
+    this._keyboardRef.instance.enterClick.subscribe(this.enterClick);
+    this._keyboardRef.instance.capsClick.subscribe(this.capsClick);
+    this._keyboardRef.instance.altClick.subscribe(this.altClick);
+    this._keyboardRef.instance.shiftClick.subscribe(this.shiftClick);
   }
 
   @HostListener('blur')
-  _hideKeyboard() {
+  hideKeyboard() {
     if (this._keyboardRef) {
       this._keyboardRef.dismiss();
     }

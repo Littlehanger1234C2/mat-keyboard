@@ -171,8 +171,6 @@ export class MatKeyboardKeyComponent implements OnInit {
     // Trigger generic click event
     this.genericClick.emit(event);
 
-    // Manipulate the focused input / textarea value
-    const value = this.inputValue;
     const caret = this.input ? this._getCursorPosition() : 0;
 
     let char: string;

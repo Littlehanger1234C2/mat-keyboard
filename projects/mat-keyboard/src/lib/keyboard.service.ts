@@ -58,7 +58,6 @@ export class MatKeyboard {
     const _config = _applyConfigDefaults(config);
     const keyboardRef = this._attachKeyboardContent(_config);
 
-    keyboardRef.instance.darkTheme = _config.darkTheme;
     keyboardRef.instance.isDebug = _config.isDebug;
 
     // a locale is provided
