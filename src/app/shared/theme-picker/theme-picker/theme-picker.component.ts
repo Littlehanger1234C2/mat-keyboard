@@ -1,11 +1,11 @@
 import {
   Component,
-  OnInit,
   ChangeDetectionStrategy,
   ViewEncapsulation,
   Input,
   EventEmitter,
-  Output
+  Output,
+  TrackByFunction
 } from '@angular/core';
 
 import { SiteTheme } from '../site-theme';
@@ -19,7 +19,7 @@ import { StyleManager } from '../style-manager.service';
   encapsulation: ViewEncapsulation.None,
   host: { class: 'theme-picker', 'aria-hidden': 'true' }
 })
-export class ThemePickerComponent implements OnInit {
+export class ThemePickerComponent {
   currentTheme: SiteTheme;
 
   @Input()
@@ -30,13 +30,9 @@ export class ThemePickerComponent implements OnInit {
 
   constructor(private styleManager: StyleManager) {}
 
-  ngOnInit() {}
+  trackTheme: TrackByFunction<SiteTheme> = (_index, theme) => theme.name;
 
-  trackTheme(_index: number, theme: SiteTheme) {
-    return theme.name;
-  }
-
-  installTheme(themeName: string) {
+  installTheme(themeName: string): void {
     // TODO refactor to map search
     const nextTheme = this.themes.find(theme => theme.name === themeName);
 
@@ -48,7 +44,11 @@ export class ThemePickerComponent implements OnInit {
     this._handleThemeChange(nextTheme);
   }
 
-  private _handleThemeChange(next: SiteTheme) {
+  generateThemeGradient({ primary, accent }: SiteTheme): string {
+    return `linear-gradient(-45deg, ${accent}, ${accent} 50%, ${primary} 50%)`;
+  }
+
+  private _handleThemeChange(next: SiteTheme): void {
     if (next.isDefault) {
       this.styleManager.removeStyle('theme');
     } else {

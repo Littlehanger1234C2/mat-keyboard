@@ -41,6 +41,13 @@ export class MainLayoutComponent {
         name: 'purple-green',
         isDark: true,
         href: 'purple-green.css'
+      },
+      {
+        primary: '#ff3d00',
+        accent: '#546e7a',
+        href: 'deeporange-bluegrey.css',
+        name: 'deeporange-bluegrey',
+        isDark: true
       }
     ];
   }

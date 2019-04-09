@@ -49,6 +49,11 @@
                 "input": "src/themes/purple-green.scss",
                 "lazy": true,
                 "bundleName": "purple-green"
+              },
+              {
+                "input": "src/themes/deeporange-bluegrey.scss",
+                "lazy": true,
+                "bundleName": "deeporange-bluegrey"
               }
             ],
             "scripts": []
@@ -111,7 +116,7 @@
           "options": {
             "tslintConfig": "src/tslint.json",
             "tsConfig": ["src/tsconfig.app.json", "src/tsconfig.spec.json"],
-            "exclude": []
+            "exclude": ["**/node_modules/**", "projects/**"]
           }
         }
       }

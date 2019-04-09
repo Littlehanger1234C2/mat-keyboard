@@ -4,7 +4,7 @@
       <mat-icon class="push-right">keyboard</mat-icon>
       Keyboard variants
     </ng-template>
-    <form class="content content-keyboard-variants">
+    <form novalidate autocomplete="off" class="content content-keyboard-variants">
       <section class="row">
         <div class="col">
           <button
@@ -71,7 +71,13 @@
       <mat-icon class="push-right">assignment</mat-icon>
       Test form
     </ng-template>
-    <form novalidate class="content content-test-form" #form="ngForm" (ngSubmit)="form.valid && submitForm(form)">
+    <form
+      novalidate
+      autocomplete="off"
+      class="content content-test-form"
+      #form="ngForm"
+      (ngSubmit)="form.valid && submitForm(form)"
+    >
       <section class="row">
         <div class="col">
           <mat-form-field floatLabel="auto" appearance="outline">
