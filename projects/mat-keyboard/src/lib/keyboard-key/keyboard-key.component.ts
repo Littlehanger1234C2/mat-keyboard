@@ -6,7 +6,8 @@ import {
   Inject,
   Input,
   OnInit,
-  Output
+  Output,
+  ViewEncapsulation
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { DOCUMENT } from '@angular/common';
@@ -25,6 +26,7 @@ export const VALUE_TAB = '\t';
   templateUrl: './keyboard-key.component.html',
   styleUrls: ['./keyboard-key.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
   host: {
     class: 'mat-keyboard-key'
   }
@@ -120,12 +122,12 @@ export class MatKeyboardKeyComponent implements OnInit {
     const classes = [];
 
     if (this.hasIcon) {
-      classes.push('mat-keyboard-key-modifier');
-      classes.push(`mat-keyboard-key-${this.lowerKey}`);
+      classes.push('mat-keyboard-key__btn--modifier');
+      classes.push(`mat-keyboard-key__btn--${this.lowerKey}`);
     }
 
     if (this.isDeadKey) {
-      classes.push('mat-keyboard-key-deadkey');
+      classes.push('mat-keyboard-key__btn--deadkey');
     }
 
     return classes.join(' ');
@@ -155,7 +157,7 @@ export class MatKeyboardKeyComponent implements OnInit {
     @Inject(MAT_KEYBOARD_ICONS) private _icons: IKeyboardIcons
   ) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     // read the deadkeys
     this._deadkeyKeys = Object.keys(this._deadkeys);
 
@@ -163,7 +165,7 @@ export class MatKeyboardKeyComponent implements OnInit {
     this._iconKeys = Object.keys(this._icons);
   }
 
-  onClick(event: MouseEvent) {
+  onClick(event: MouseEvent): void {
     // Trigger a global key event
     // TODO: investigate
     this._triggerKeyEvent();

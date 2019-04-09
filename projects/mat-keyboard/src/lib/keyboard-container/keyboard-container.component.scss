@@ -1,7 +1,7 @@
 @import '~@angular/material/theming';
 
-$mat-keyboard-min-width: 568px !default;
-$mat-keyboard-max-width: 960px !default;
+$mat-keyboard-min-width: 568px;
+$mat-keyboard-max-width: 960px;
 
 .mat-keyboard-container {
   @include mat-elevation(6);

@@ -72,7 +72,7 @@ export class MatKeyboardComponent implements OnInit {
   // inject dependencies
   constructor(@Inject(LOCALE_ID) private _locale: string, private _keyboardLayout: MatKeyboardLayout) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     // set a fallback using the locale
     if (!this.layout) {
       this.locale = this._keyboardLayout.mapLocale(this._locale) ? this._locale : 'en-US';
@@ -85,7 +85,7 @@ export class MatKeyboardComponent implements OnInit {
    * @param event
    */
   @HostListener('document:keydown', ['$event'])
-  onKeyDown(event: KeyboardEvent) {
+  onKeyDown(event: KeyboardEvent): void {
     // 'activate' corresponding key
     this.keys
       .filter((key: MatKeyboardKeyComponent) => key.key === event.key)
@@ -118,7 +118,7 @@ export class MatKeyboardComponent implements OnInit {
    * @param event
    */
   @HostListener('document:keyup', ['$event'])
-  onKeyUp(event: KeyboardEvent) {
+  onKeyUp(event: KeyboardEvent): void {
     // 'deactivate' corresponding key
     this.keys
       .filter((key: MatKeyboardKeyComponent) => key.key === event.key)
@@ -143,18 +143,18 @@ export class MatKeyboardComponent implements OnInit {
 
   trackKey: TrackByFunction<string | SpecialKey> = (_index, item) => item;
 
-  setInputInstance(inputInstance: ElementRef) {
+  setInputInstance(inputInstance: ElementRef): void {
     this._inputInstance$.next(inputInstance);
   }
 
-  attachControl(control: AbstractControl) {
+  attachControl(control: AbstractControl): void {
     this.control = control;
   }
 
   /**
    * dismisses the keyboard
    */
-  dismiss() {
+  dismiss(): void {
     this.keyboardRef.dismiss();
   }
 
@@ -185,7 +185,7 @@ export class MatKeyboardComponent implements OnInit {
   /**
    * bubbles event if submit is potentially triggered
    */
-  onEnterClick() {
+  onEnterClick(): void {
     // notify subscribers
     this.enterClick.next();
   }
@@ -194,7 +194,7 @@ export class MatKeyboardComponent implements OnInit {
    * simulates clicking `CapsLock` key
    * @param targetState
    */
-  onCapsClick(targetState = !this._capsLocked) {
+  onCapsClick(targetState: boolean = !this._capsLocked): void {
     // not implemented
     this._capsLocked = targetState;
 
@@ -205,7 +205,7 @@ export class MatKeyboardComponent implements OnInit {
   /**
    * simulates clicking `Alt` key
    */
-  onAltClick() {
+  onAltClick(): void {
     // invert modifier meaning
     this._modifier = this._invertAltModifier(this._modifier);
 
@@ -216,7 +216,7 @@ export class MatKeyboardComponent implements OnInit {
   /**
    * simulates clicking `Shift` key
    */
-  onShiftClick() {
+  onShiftClick(): void {
     // invert modifier meaning
     this._modifier = this._invertShiftModifier(this._modifier);
 

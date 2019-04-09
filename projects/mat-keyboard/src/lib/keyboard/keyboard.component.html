@@ -1,9 +1,9 @@
-<div class="mat-keyboard-wrapper">
-  <nav class="mat-keyboard-layout">
-    <div class="mat-keyboard-row" *ngFor="let row of layout.keys">
+<div class="mat-keyboard__wrapper">
+  <div class="mat-keyboard__layout">
+    <div class="mat-keyboard__row" *ngFor="let row of layout.keys">
       <ng-container *ngFor="let key of row; trackBy: trackKey">
         <mat-keyboard-key
-          class="mat-keyboard-col"
+          class="mat-keyboard__col"
           *ngIf="getModifiedKey(key)"
           [key]="getModifiedKey(key)"
           [active]="isActive(key)"
@@ -16,5 +16,5 @@
         ></mat-keyboard-key>
       </ng-container>
     </div>
-  </nav>
+  </div>
 </div>

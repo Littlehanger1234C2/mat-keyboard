@@ -1,0 +1,48 @@
+@import '~@angular/material/theming';
+
+$mat-keyboard-capslock-led: #0f0;
+$mat-keyboard-capslock-shine: #adff2f;
+
+@mixin mat-keyboard-theme($theme) {
+  $background: map-get($theme, background);
+  $foreground: map-get($theme, foreground);
+
+  .mat-keyboard {
+    background-color: mat-color($background, card);
+    color: mat-color($foreground, text);
+  }
+
+  .mat-keyboard-key {
+    &__btn {
+      &--active,
+      &--pressed {
+        background-color: mat-color($background, selected-button);
+      }
+      &--capslock {
+        &::before {
+          background-color: mat-color($background, selected-button);
+        }
+        &.mat-keyboard-key__btn--active::before {
+          background-color: $mat-keyboard-capslock-led;
+          box-shadow: 0 0 §px $mat-keyboard-capslock-shine;
+        }
+      }
+    }
+  }
+}
+
+@mixin mat-keyboard-typography($config) {
+  .mat-keyboard {
+    font: {
+      family: mat-font-family($config);
+      size: mat-font-size($config, button);
+    }
+  }
+
+  .mat-keyboard-key {
+    font: {
+      family: mat-font-family($config);
+      size: mat-font-size($config, button);
+    }
+  }
+}
