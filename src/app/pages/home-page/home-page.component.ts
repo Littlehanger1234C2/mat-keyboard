@@ -12,7 +12,6 @@ import {
 import { Subscription, BehaviorSubject, Observable } from 'rxjs';
 import { MatKeyboardRef, IKeyboardLayout, MatKeyboard, MAT_KEYBOARD_LAYOUTS } from '@ngx-extensions/mat-keyboard';
 import { NgModel, NgControl, FormControl, NgForm } from '@angular/forms';
-import { MatSlideToggleChange } from '@angular/material';
 
 @Component({
   selector: 'demo-home-page',
@@ -39,8 +38,6 @@ export class HomePageComponent implements OnInit, OnDestroy {
   }
 
   duration: number;
-
-  isDebug: boolean;
 
   defaultLocale: string;
 
@@ -93,8 +90,7 @@ export class HomePageComponent implements OnInit, OnDestroy {
 
   openKeyboard(locale = this.defaultLocale) {
     this._keyboardRef = this._keyboardService.open(locale, {
-      duration: this.duration,
-      isDebug: this.isDebug
+      duration: this.duration
     });
     if (this._enterSubscription) {
       this._enterSubscription.unsubscribe();
@@ -116,8 +112,7 @@ export class HomePageComponent implements OnInit, OnDestroy {
 
   openAttachedKeyboard(locale = this.defaultLocale) {
     this._keyboardRef = this._keyboardService.open(locale, {
-      duration: this.duration,
-      isDebug: this.isDebug
+      duration: this.duration
     });
 
     // reference the input element
@@ -125,10 +120,5 @@ export class HomePageComponent implements OnInit, OnDestroy {
 
     // set control
     this._keyboardRef.instance.attachControl(this._attachToControl.control);
-  }
-
-  toggleDebug(toggle: MatSlideToggleChange) {
-    this.isDebug = toggle.checked;
-    this._keyboardRef.instance.isDebug = this.isDebug;
   }
 }
