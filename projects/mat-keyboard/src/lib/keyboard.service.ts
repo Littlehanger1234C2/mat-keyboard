@@ -60,15 +60,15 @@ export class MatKeyboard {
 
     // a locale is provided
     if (this._keyboardLayout.isLocaleAvailable(layoutOrLocale)) {
-      keyboardRef.instance.locale = layoutOrLocale;
-      keyboardRef.instance.layout = this._keyboardLayout.getLocaleLayout(layoutOrLocale);
+      keyboardRef.keyboardInstance.locale = layoutOrLocale;
+      keyboardRef.keyboardInstance.layout = this._keyboardLayout.getLocaleLayout(layoutOrLocale);
     }
 
     // a layout name is provided
     if (this._keyboardLayout.isLayoutAvailable(layoutOrLocale)) {
       const layout = this._keyboardLayout.getLayout(layoutOrLocale);
-      keyboardRef.instance.layout = layout;
-      keyboardRef.instance.locale = layout.lang && layout.lang[-1];
+      keyboardRef.keyboardInstance.layout = layout;
+      keyboardRef.keyboardInstance.locale = layout.lang && layout.lang[-1];
     }
 
     // When the keyboard is dismissed, lower the keyboard counter.
@@ -111,7 +111,7 @@ export class MatKeyboard {
   /**
    * Dismisses the currently-visible keyboard.
    */
-  dismiss() {
+  dismiss(): void {
     if (this._openedKeyboardRef) {
       this._openedKeyboardRef.dismiss();
     }

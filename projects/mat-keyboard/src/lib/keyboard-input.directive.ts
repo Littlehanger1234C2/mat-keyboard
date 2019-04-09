@@ -38,33 +38,33 @@ export class MatKeyboardInput implements OnDestroy {
     @Optional() @Self() private _control?: NgControl
   ) {}
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.hideKeyboard();
   }
 
   @HostListener('focus')
-  showKeyboard() {
+  showKeyboard(): void {
     this._keyboardRef = this._keyboardService.open(this.matKeyboard, {
       duration: this.duration
     });
 
     // reference the input element
-    this._keyboardRef.instance.setInputInstance(this._elementRef);
+    this._keyboardRef.keyboardInstance.setInputInstance(this._elementRef);
 
     // set control if given, cast to smth. non-abstract
     if (this._control) {
-      this._keyboardRef.instance.attachControl(this._control.control);
+      this._keyboardRef.keyboardInstance.attachControl(this._control.control);
     }
 
     // connect outputs
-    this._keyboardRef.instance.enterClick.subscribe(this.enterClick);
-    this._keyboardRef.instance.capsClick.subscribe(this.capsClick);
-    this._keyboardRef.instance.altClick.subscribe(this.altClick);
-    this._keyboardRef.instance.shiftClick.subscribe(this.shiftClick);
+    this._keyboardRef.keyboardInstance.enterClick.subscribe(this.enterClick);
+    this._keyboardRef.keyboardInstance.capsClick.subscribe(this.capsClick);
+    this._keyboardRef.keyboardInstance.altClick.subscribe(this.altClick);
+    this._keyboardRef.keyboardInstance.shiftClick.subscribe(this.shiftClick);
   }
 
   @HostListener('blur')
-  hideKeyboard() {
+  hideKeyboard(): void {
     if (this._keyboardRef) {
       this._keyboardRef.dismiss();
     }

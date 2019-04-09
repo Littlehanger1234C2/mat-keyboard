@@ -9,48 +9,33 @@ import { MatKeyboardContainerComponent } from './keyboard-container/keyboard-con
  */
 export class MatKeyboardRef {
   /** Subject for notifying the user that the keyboard has closed. */
-  private readonly _afterClosed: Subject<any> = new Subject();
+  private readonly _afterDismissed = new Subject<void>();
 
-  /** Subject for notifying the user that the keyboard has opened and appeared. */
-  private readonly _afterOpened: Subject<any> = new Subject();
-
-  /** The instance of the component making up the content of the keyboard. */
-  instance: MatKeyboardComponent;
-
-  /** The instance of the component making up the content of the keyboard. */
-  containerInstance: MatKeyboardContainerComponent;
-
+  /**
+   * Creates a new instance
+   * @param keyboardInstance The instance of the component making up the content of the keyboard.
+   * @param containerInstance The instance of the component making up the content of the keyboard.
+   * @param _overlayRef The overlay ref
+   */
   constructor(
-    instance: MatKeyboardComponent,
-    containerInstance: MatKeyboardContainerComponent,
+    public keyboardInstance: MatKeyboardComponent,
+    public readonly containerInstance: MatKeyboardContainerComponent,
     private _overlayRef: OverlayRef
   ) {
-    // Sets the readonly instance of the keyboard content component.
-    this.instance = instance;
-    this.containerInstance = containerInstance;
-
     // Finish dismiss on exitting
     containerInstance.onExit.subscribe(() => this._finishDismiss());
   }
 
   /** Dismisses the keyboard. */
-  dismiss() {
-    if (!this._afterClosed.closed) {
+  dismiss(): void {
+    if (!this._afterDismissed.closed) {
       this.containerInstance.exit();
-    }
-  }
-
-  /** Marks the keyboard as opened */
-  _open() {
-    if (!this._afterOpened.closed) {
-      this._afterOpened.next();
-      this._afterOpened.complete();
     }
   }
 
   /** Gets an observable that is notified when the keyboard is finished closing. */
   afterDismissed(): Observable<void> {
-    return this._afterClosed.asObservable();
+    return this._afterDismissed.asObservable();
   }
 
   /** Gets an observable that is notified when the keyboard has opened and appeared. */
@@ -59,10 +44,10 @@ export class MatKeyboardRef {
   }
 
   /** Cleans up the DOM after closing. */
-  private _finishDismiss() {
+  private _finishDismiss(): void {
+    this.keyboardInstance = null;
     this._overlayRef.dispose();
-
-    this._afterClosed.next();
-    this._afterClosed.complete();
+    this._afterDismissed.next();
+    this._afterDismissed.complete();
   }
 }
