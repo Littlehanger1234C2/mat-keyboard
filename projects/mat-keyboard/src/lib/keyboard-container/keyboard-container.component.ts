@@ -1,4 +1,4 @@
-import { animate, AnimationEvent, state, style, transition, trigger } from '@angular/animations';
+import { AnimationEvent } from '@angular/animations';
 import { BasePortalOutlet, CdkPortalOutlet, ComponentPortal } from '@angular/cdk/portal';
 import {
   ChangeDetectionStrategy,
@@ -10,23 +10,17 @@ import {
   HostListener,
   NgZone,
   OnDestroy,
-  ViewChild
+  ViewChild,
+  ViewEncapsulation
 } from '@angular/core';
-import { AnimationCurves, AnimationDurations } from '@angular/material/core';
-import { Observable, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 import { first } from 'rxjs/operators';
 
 import { MatKeyboardConfig } from '../keyboard-config';
-import { KeyboardAnimationState, KeyboardAnimationTransition } from '../keyboard-animation';
-
-// We can't use constants from animation.ts here because you can't use
-// a text interpolation in anything that is analyzed statically with ngc (for AoT compile).
-const SHOW_ANIMATION = `${AnimationDurations.ENTERING} ${AnimationCurves.DECELERATION_CURVE}`;
-const HIDE_ANIMATION = `${AnimationDurations.EXITING} ${AnimationCurves.ACCELERATION_CURVE}`;
+import { KeyboardAnimationState, matKeyboardAnimations } from '../keyboard-animations';
 
 /**
- * Internal component that wraps user-provided keyboard content.
- * @docs-private
+ * Outlet for a keyboard
  */
 @Component({
   selector: 'mat-keyboard-container',
@@ -35,15 +29,10 @@ const HIDE_ANIMATION = `${AnimationDurations.EXITING} ${AnimationCurves.ACCELERA
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     class: 'mat-keyboard-container',
-    'attr.role': 'alert'
+    role: 'alert'
   },
-  animations: [
-    trigger('state', [
-      state(`${KeyboardAnimationState.Visible}`, style({ transform: 'translateY(0%)' })),
-      transition(`${KeyboardAnimationTransition.Hide}`, animate(HIDE_ANIMATION)),
-      transition(`${KeyboardAnimationTransition.Show}`, animate(SHOW_ANIMATION))
-    ])
-  ]
+  encapsulation: ViewEncapsulation.None,
+  animations: [matKeyboardAnimations.keyboardContainer]
 })
 export class MatKeyboardContainerComponent extends BasePortalOutlet implements OnDestroy {
   /** Whether the component has been destroyed. */
@@ -54,14 +43,14 @@ export class MatKeyboardContainerComponent extends BasePortalOutlet implements O
   _portalOutlet: CdkPortalOutlet;
 
   /** The state of the keyboard animations. */
-  @HostBinding('@state')
-  _animationState: KeyboardAnimationState = KeyboardAnimationState.Void;
+  @HostBinding('@keyboardContainer')
+  _animationState = KeyboardAnimationState.Void;
 
   /** Subject for notifying that the keyboard has exited from view. */
-  onExit: Subject<any> = new Subject();
+  readonly onExit = new Subject<void>();
 
   /** Subject for notifying that the keyboard has finished entering the view. */
-  onEnter: Subject<any> = new Subject();
+  readonly onEnter = new Subject<void>();
 
   // the keyboard configuration
   keyboardConfig: MatKeyboardConfig;
@@ -70,16 +59,13 @@ export class MatKeyboardContainerComponent extends BasePortalOutlet implements O
     super();
   }
 
-  /**
-   * Makes sure the exit callbacks have been invoked when the element is destroyed.
-   */
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this._destroyed = true;
     this._completeExit();
   }
 
   @HostListener('mousedown', ['$event'])
-  onMousedown(event: MouseEvent) {
+  onMousedown(event: MouseEvent): void {
     // TODO: revisit
     event.preventDefault();
   }
@@ -98,19 +84,17 @@ export class MatKeyboardContainerComponent extends BasePortalOutlet implements O
     throw Error('Not yet implemented');
   }
 
-  /** Handle end of animations, updating the state of the keyboard. */
-  @HostListener('@state.done', ['$event'])
-  onAnimationEnd(event: AnimationEvent) {
+  /** Callback, invoked whenever an animation on the host completes. */
+  @HostListener('@keyboardContainer.done', ['$event'])
+  _onAnimationEnd(event: AnimationEvent): void {
     const { fromState, toState } = event;
 
     if (
       (toState === KeyboardAnimationState.Void && fromState !== KeyboardAnimationState.Void) ||
-      toState.startsWith('hidden')
+      toState === KeyboardAnimationState.Hidden
     ) {
       this._completeExit();
-    }
-
-    if (toState === KeyboardAnimationState.Visible) {
+    } else if (toState === KeyboardAnimationState.Visible) {
       // Note: we shouldn't use `this` inside the zone callback,
       // because it can cause a memory leak.
       const onEnter = this.onEnter;
@@ -123,24 +107,21 @@ export class MatKeyboardContainerComponent extends BasePortalOutlet implements O
   }
 
   /** Begin animation of keyboard entrance into view. */
-  enter() {
+  enter(): void {
     if (!this._destroyed) {
       this._animationState = KeyboardAnimationState.Visible;
       this._changeDetectorRef.detectChanges();
     }
   }
 
-  /** Begin animation of the snack bar exiting from view. */
-  exit(): Observable<void> {
+  /** Begin animation of keyboard exiting from view. */
+  exit(): void {
     this._animationState = KeyboardAnimationState.Hidden;
-    return this.onExit;
   }
 
-  /**
-   * Waits for the zone to settle before removing the element. Helps prevent
-   * errors where we end up removing an element which is in the middle of an animation.
-   */
-  private _completeExit() {
+  private _completeExit(): void {
+    // Waits for the zone to settle before removing the element.
+    // Helps prevent errors where we end up removing an element which is in the middle of an animation.
     this._ngZone.onMicrotaskEmpty
       .asObservable()
       .pipe(first())

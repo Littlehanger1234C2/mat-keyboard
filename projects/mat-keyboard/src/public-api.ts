@@ -20,6 +20,6 @@ export {
 } from './lib/keyboard-layouts-config';
 export * from './lib/special-key';
 export * from './lib/keyboard-modifier';
-export * from './lib/keyboard-animation';
+export { KeyboardAnimationState } from './lib/keyboard-animations';
 export * from './lib/keyboard-ref';
 export * from './lib/locale-map';
