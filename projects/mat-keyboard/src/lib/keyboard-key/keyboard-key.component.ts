@@ -158,10 +158,7 @@ export class MatKeyboardKeyComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // read the deadkeys
     this._deadkeyKeys = Object.keys(this._deadkeys);
-
-    // read the icons
     this._iconKeys = Object.keys(this._icons);
   }
 

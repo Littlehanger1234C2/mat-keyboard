@@ -13,7 +13,7 @@ import {
   TrackByFunction
 } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 import { MatKeyboardKeyComponent } from '../keyboard-key/keyboard-key.component';
 import { KeyboardModifier } from '../keyboard-modifier';
@@ -21,6 +21,32 @@ import { IKeyboardLayout } from '../keyboard-layouts-config';
 import { MatKeyboardRef } from '../keyboard-ref';
 import { SpecialKey } from '../special-key';
 import { MatKeyboardLayout } from '../keyboard-layout.service';
+
+function _invertShiftModifier(modifier: KeyboardModifier): KeyboardModifier {
+  switch (modifier) {
+    case KeyboardModifier.None:
+      return KeyboardModifier.Shift;
+    case KeyboardModifier.Alt:
+      return KeyboardModifier.ShiftAlt;
+    case KeyboardModifier.ShiftAlt:
+      return KeyboardModifier.Alt;
+    case KeyboardModifier.Shift:
+      return KeyboardModifier.None;
+  }
+}
+
+function _invertAltModifier(modifier: KeyboardModifier): KeyboardModifier {
+  switch (modifier) {
+    case KeyboardModifier.None:
+      return KeyboardModifier.Alt;
+    case KeyboardModifier.Shift:
+      return KeyboardModifier.ShiftAlt;
+    case KeyboardModifier.ShiftAlt:
+      return KeyboardModifier.Shift;
+    case KeyboardModifier.Alt:
+      return KeyboardModifier.None;
+  }
+}
 
 /**
  * A component used to open as the default keyboard, matching material spec.
@@ -37,9 +63,9 @@ import { MatKeyboardLayout } from '../keyboard-layout.service';
   }
 })
 export class MatKeyboardComponent implements OnInit {
-  private _inputInstance$: BehaviorSubject<ElementRef | null> = new BehaviorSubject(null);
+  private readonly _inputInstance$ = new BehaviorSubject<ElementRef | null>(null);
 
-  private _modifier: KeyboardModifier = KeyboardModifier.None;
+  private _modifier = KeyboardModifier.None;
 
   private _capsLocked = false;
 
@@ -56,20 +82,17 @@ export class MatKeyboardComponent implements OnInit {
   // the instance of the component making up the content of the keyboard
   keyboardRef: MatKeyboardRef;
 
-  readonly enterClick: EventEmitter<void> = new EventEmitter<void>();
+  readonly enterClick = new EventEmitter<void>();
 
-  readonly capsClick: EventEmitter<void> = new EventEmitter<void>();
+  readonly capsClick = new EventEmitter<void>();
 
-  readonly altClick: EventEmitter<void> = new EventEmitter<void>();
+  readonly altClick = new EventEmitter<void>();
 
-  readonly shiftClick: EventEmitter<void> = new EventEmitter<void>();
+  readonly shiftClick = new EventEmitter<void>();
 
-  // returns an observable of the input instance
-  get inputInstance(): Observable<ElementRef | null> {
-    return this._inputInstance$.asObservable();
-  }
+  /** An observable of the input instance */
+  readonly inputInstance = this._inputInstance$.asObservable();
 
-  // inject dependencies
   constructor(@Inject(LOCALE_ID) private _locale: string, private _keyboardLayout: MatKeyboardLayout) {}
 
   ngOnInit(): void {
@@ -88,8 +111,8 @@ export class MatKeyboardComponent implements OnInit {
   onKeyDown(event: KeyboardEvent): void {
     // 'activate' corresponding key
     this.keys
-      .filter((key: MatKeyboardKeyComponent) => key.key === event.key)
-      .forEach((key: MatKeyboardKeyComponent) => {
+      .filter(key => key.key === event.key)
+      .forEach(key => {
         key.pressed = true;
       });
 
@@ -164,19 +187,19 @@ export class MatKeyboardComponent implements OnInit {
    * @param
    */
   isActive(key: (string | SpecialKey)[]): boolean {
-    const modifiedKey: string = this.getModifiedKey(key);
-    const isActiveCapsLock: boolean = modifiedKey === SpecialKey.Caps && this._capsLocked;
-    const isActiveModifier: boolean = modifiedKey === KeyboardModifier[this._modifier];
+    const modifiedKey = this.getModifiedKey(key);
+    const isActiveCapsLock = modifiedKey === SpecialKey.Caps && this._capsLocked;
+    const isActiveModifier = modifiedKey === KeyboardModifier[this._modifier];
     return isActiveCapsLock || isActiveModifier;
   }
 
   // retrieves modified key
   getModifiedKey(key: (string | SpecialKey)[]): string {
-    let modifier: KeyboardModifier = this._modifier;
+    let modifier = this._modifier;
 
     // `CapsLock` inverts the meaning of `Shift`
     if (this._capsLocked) {
-      modifier = this._invertShiftModifier(this._modifier);
+      modifier = _invertShiftModifier(this._modifier);
     }
 
     return key[modifier];
@@ -192,11 +215,11 @@ export class MatKeyboardComponent implements OnInit {
 
   /**
    * simulates clicking `CapsLock` key
-   * @param targetState
+   * @param capsLocked wether the caps modifier is active or not
    */
-  onCapsClick(targetState: boolean = !this._capsLocked): void {
+  onCapsClick(capsLocked: boolean = !this._capsLocked): void {
     // not implemented
-    this._capsLocked = targetState;
+    this._capsLocked = capsLocked;
 
     // notify subscribers
     this.capsClick.next();
@@ -207,7 +230,7 @@ export class MatKeyboardComponent implements OnInit {
    */
   onAltClick(): void {
     // invert modifier meaning
-    this._modifier = this._invertAltModifier(this._modifier);
+    this._modifier = _invertAltModifier(this._modifier);
 
     // notify subscribers
     this.altClick.next();
@@ -218,41 +241,9 @@ export class MatKeyboardComponent implements OnInit {
    */
   onShiftClick(): void {
     // invert modifier meaning
-    this._modifier = this._invertShiftModifier(this._modifier);
+    this._modifier = _invertShiftModifier(this._modifier);
 
     // notify subscribers
     this.shiftClick.next();
-  }
-
-  private _invertAltModifier(modifier: KeyboardModifier): KeyboardModifier {
-    switch (modifier) {
-      case KeyboardModifier.None:
-        return KeyboardModifier.Alt;
-
-      case KeyboardModifier.Shift:
-        return KeyboardModifier.ShiftAlt;
-
-      case KeyboardModifier.ShiftAlt:
-        return KeyboardModifier.Shift;
-
-      case KeyboardModifier.Alt:
-        return KeyboardModifier.None;
-    }
-  }
-
-  private _invertShiftModifier(modifier: KeyboardModifier): KeyboardModifier {
-    switch (modifier) {
-      case KeyboardModifier.None:
-        return KeyboardModifier.Shift;
-
-      case KeyboardModifier.Alt:
-        return KeyboardModifier.ShiftAlt;
-
-      case KeyboardModifier.ShiftAlt:
-        return KeyboardModifier.Alt;
-
-      case KeyboardModifier.Shift:
-        return KeyboardModifier.None;
-    }
   }
 }

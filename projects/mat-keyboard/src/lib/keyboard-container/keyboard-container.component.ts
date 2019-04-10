@@ -70,7 +70,9 @@ export class MatKeyboardContainerComponent extends BasePortalOutlet implements O
     event.preventDefault();
   }
 
-  /** Attach a component portal as content to this keyboard container. */
+  /**
+   * Attach a component portal as content to this keyboard container.
+   */
   attachComponentPortal<T>(portal: ComponentPortal<T>): ComponentRef<T> {
     if (this._portalOutlet.hasAttached()) {
       throw Error('Attempting to attach keyboard content after content is already attached');
@@ -79,7 +81,9 @@ export class MatKeyboardContainerComponent extends BasePortalOutlet implements O
     return this._portalOutlet.attachComponentPortal(portal);
   }
 
-  // Attach a template portal as content to this keyboard container
+  /**
+   * Attach a template portal as content to this keyboard container
+   */
   attachTemplatePortal(): EmbeddedViewRef<any> {
     throw Error('Not yet implemented');
   }

@@ -28,7 +28,7 @@ export class MatKeyboardLayout {
     return this._availableLocales;
   }
 
-  constructor(@Inject(MAT_KEYBOARD_LAYOUTS) private _layouts: IKeyboardLayouts) {
+  constructor(@Inject(MAT_KEYBOARD_LAYOUTS) private readonly _layouts: IKeyboardLayouts) {
     this._availableLocales = _applyAvailableLayouts(_layouts);
   }
 
