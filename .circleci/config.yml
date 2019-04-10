@@ -1,0 +1,42 @@
+# CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-javascript/ for more details
+# Use http://yaml-online-parser.appspot.com/ for validation
+
+version: 2
+jobs:
+  build:
+    working_directory: ~/ngx-extensions
+    docker:
+      - image: circleci/node:8-browsers
+    environment:
+      CHROME_BIN: '/usr/bin/google-chrome'
+    branches:
+      ignore:
+        - gh-pages
+    steps:
+      - checkout
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+      - run:
+          name: install-dependencies
+          command: npm ci
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+      - run:
+          name: lint
+          command: npm run lint
+      - run:
+          name: unit-test
+          command: npm run test
+      - run:
+          name: coveralls-report
+          command: npm run coveralls
+      - store_test_results:
+          path: coverage
