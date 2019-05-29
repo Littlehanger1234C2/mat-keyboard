@@ -63,7 +63,9 @@ function _invertAltModifier(modifier: KeyboardModifier): KeyboardModifier {
   }
 })
 export class MatKeyboardComponent implements OnInit {
-  private readonly _inputInstance$ = new BehaviorSubject<ElementRef | null>(null);
+  private readonly _inputInstance$ = new BehaviorSubject<ElementRef<HTMLInputElement | HTMLTextAreaElement> | null>(
+    null
+  );
 
   private _modifier = KeyboardModifier.None;
 
@@ -166,7 +168,7 @@ export class MatKeyboardComponent implements OnInit {
 
   trackKey: TrackByFunction<string | SpecialKey> = (_index, item) => item;
 
-  setInputInstance(inputInstance: ElementRef): void {
+  setInputInstance(inputInstance: ElementRef<HTMLInputElement | HTMLTextAreaElement>): void {
     this._inputInstance$.next(inputInstance);
   }
 
