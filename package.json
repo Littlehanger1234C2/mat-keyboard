@@ -29,7 +29,7 @@
     "start": "ng serve",
     "build": "run-p build:lib build:demo build:docs",
     "build:lib": "rm -rf ./dist/mat-keyboard && ng build mat-keyboard",
-    "build:demo": "ng build --prod --base-href=/demo/",
+    "build:demo": "ng build --prod --base-href=/mat-keyboard/",
     "build:docs": "compodoc ./projects/mat-keyboard -p ./projects/mat-keyboard/tsconfig.lib.json --silent --disableCoverage --disablePrivateOrInternalSupport --theme readthedocs --output ./dist/docs",
     "test": "ng test mat-keyboard --code-coverage --watch=false --source-map=false",
     "coveralls": "cat ./coverage/lcov.info | node ./node_modules/coveralls/bin/coveralls.js",
@@ -43,7 +43,8 @@
     "format": "prettier -c {src,projects,scripts}/**/*.{ts,js,json,css,scss,md,sh}",
     "format--fix": "npm run format -- --write",
     "changelog--bump": "conventional-changelog -i CHANGELOG.md -s -p angular",
-    "changelog--next": "conventional-changelog -i CHANGELOG.md -s -u -p angular"
+    "changelog--next": "conventional-changelog -i CHANGELOG.md -s -u -p angular",
+    "publish:demo": "npm run build:demo && gh-pages -d dist/app"
   },
   "dependencies": {
     "@angular/animations": "^7.2.11",
@@ -79,6 +80,7 @@
     "codelyzer": "^5.0.0",
     "conventional-changelog-cli": "^2.0.12",
     "coveralls": "^3.0.3",
+    "gh-pages": "^2.0.1",
     "husky": "^1.3.1",
     "jasmine-core": "~3.3.0",
     "jasmine-marbles": "~0.4.0",

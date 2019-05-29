@@ -145,7 +145,7 @@ export class AppModule {}
 
 [the-darc/angular-virtual-keyboard]: https://github.com/the-darc/angular-virtual-keyboard
 [greywyvern vki]: http://www.greywyvern.com/code/javascript/keyboard
-[demo]: https://ngx-material-keyboard.github.io/demo/
+[demo]: https://ngx-extensions.github.io/mat-keyboard
 [docs]: https://ngx-material-keyboard.github.io/core/
 [injectiontoken]: https://angular.io/guide/dependency-injection-in-action#injectiontoken
 [vki readme]: https://goo.gl/fCDExr
